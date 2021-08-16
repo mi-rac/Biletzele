@@ -1,5 +1,5 @@
 from flask import render_template, flash, redirect, url_for, request
-from app import app
+from app import app, socketio
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
@@ -12,6 +12,10 @@ def chat():
     room = request.args.get('room')
 
     if username and room:
-        return render_template('chat.html')
+        return render_template('chat.html', username=username, room=room)
     else:
         return redirect(url_for('home'))
+
+@socketio.on('join_room')
+def handle_join_room_event(data):
+    app.logger.info("{} has joined the room {}".format(data['username'], data['room']))

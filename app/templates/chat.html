@@ -1,16 +1,27 @@
-{% extends index.html %}
+{% extends "index.html" %}
+
 
 {% block content %}
-<h1>Hi There Stranger</h1>
+
+<h1>Welcome to chat room {{ room }}</h1>
+
+<div id="messages"></div>
+
 <form>
-    <div>
-        <label>Please enter your username:</label>
-        <input type="text" name="username">
-    </div>
-    <div>
-        <label>Please enter room ID:</label>
-        <input type="text" name="room">
-    </div>
-    <button type="submit">Submit</button>
+    <input type="text" placeholder="Enter your message here">
+    <button type="submit">Send</button>
 </form>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+<script>
+    const socket = io.connect("http://127.0.0.1:5000");
+
+    socket.on('connect', function() {
+        socket.emit('join_room', {
+            username: "{{username}}",
+            room: "{{ room }}"
+        })
+    })
+</script>
+
 {% endblock %}
