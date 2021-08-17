@@ -1,16 +1,10 @@
 {% extends "index.html" %}
 
 {% block content %}
-<h1>Hi There Stranger</h1>
-<form action="/chat">
-    <div>
-        <label>Please enter your username:</label>
-        <input type="text" name="username">
-    </div>
-    <div>
-        <label>Please enter room ID:</label>
-        <input type="text" name="room">
-    </div>
-    <button type="submit">Submit</button>
-</form>
+<form id="host" action="/host" method="get"></form>
+<form id="join" action="/join" method="get"></form>
+
+<button form="host" class="button button1" type="submit">Host Game</button>
+<button form="join" class="button button2" type="submit">Join Game</button>
+
 {% endblock %}

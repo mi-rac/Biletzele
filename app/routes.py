@@ -7,6 +7,10 @@ from app import app, socketio
 def home():
     return render_template('home.html')
 
+@app.route('/host')
+def host():
+    return render_template('host.html')
+
 @app.route('/chat')
 def chat():
     username = request.args.get('username')
