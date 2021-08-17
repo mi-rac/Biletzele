@@ -21,8 +21,8 @@ def new_lobby(username):
     letters = string.ascii_uppercase
     room = ''.join(random.choice(letters) for i in range(4))
     game_rooms[room] = {}
-    game_rooms[room].set_default('users', []).append(username)
-    return render_template('lobby.html', room=room, username=username, host=True)
+    game_rooms[room].setdefault('users', []).append(username)
+    return render_template('lobby.html', room=room, username=username, game_rooms=game_rooms, host=True)
 
 @app.route('/leave_room')
 def leave_room():
@@ -32,7 +32,8 @@ def leave_room():
 def join(username):
     room = request.args.get('room')
     if room:
-        return render_template('lobby.html', room=room, username=username)
+        game_rooms[room][users].append(username)
+        return render_template('lobby.html', room=room, username=username, game_rooms=game_rooms)
     else:
         return redirect(url_for('home', username=username))
 
