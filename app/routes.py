@@ -33,7 +33,7 @@ def join(username):
     room = request.args.get('room')
     if room:
         game_rooms[room][users].append(username)
-        return render_template('lobby.html', room=room, username=username, game_rooms=game_rooms)
+        return render_template('lobby.html', room=room, username=username, users=game_rooms[room][users])
     else:
         return redirect(url_for('home', username=username))
 

@@ -9,7 +9,11 @@
 <div>
 
 </div>
-
+<ul>
+  {% for user in users %}
+  <li>{{ user }}</li>
+  {% endfor %}
+</ul>
 <div>
     <form action="/leave_room">
         <input class="button button2" type="button" name="" value="Exit Room">
