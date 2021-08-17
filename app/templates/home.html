@@ -1,7 +1,11 @@
 {% extends "index.html" %}
 
 {% block content %}
-<form id="host" action="/lobby" method="get">
+<div>
+    Welcome <i>{{ username }}</i>!
+</div>
+
+<form id="host" action="{{ url_for('new_lobby', username=username) }}" method="get">
     <button class="button button1" type="submit">Host Game</button><br>
 </form>
 

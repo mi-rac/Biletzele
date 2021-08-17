@@ -1,11 +1,23 @@
 {% extends "index.html" %}
 
 {% block content %}
+<div>
+    <label>Share the room ID with all other players:</label><br>
+    <b>{{ room }}</b>
+</div>
+<div>
+    <form action="/leave_room">
+        <input class="button button2" type="button" name="" value="Exit Room">
+    </form>
+</div>
 
-    <div>
-        <label>Share the room ID with all other players:</label><br>
-        <b>{{ room }}</b>
-    </div>
-
-</form>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+<script>
+    const socket = io.connect("http://127.0.0.1:5000");
+    socket.on('connect', function () {
+        socket.emit('join_room', {
+            username: "{{ username }}",
+            room: "{{ room }}"
+        });
+</script>
 {% endblock %}

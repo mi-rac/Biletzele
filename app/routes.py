@@ -5,15 +5,24 @@ import random
 import string
 
 @app.route('/', methods=['GET', 'POST'])
+@app.route('/index', methods=['GET', 'POST'])
+def index():
+    return render_template('index.html')
+
 @app.route('/home', methods=['GET', 'POST'])
 def home():
-    return render_template('home.html')
+    username = request.args.get('username')
+    return render_template('home.html', username=username)
 
-@app.route('/lobby')
-def lobby():
+@app.route('/new_lobby/<string:username>')
+def new_lobby(username):
     letters = string.ascii_uppercase
     room = ''.join(random.choice(letters) for i in range(4))
-    return render_template('lobby.html', room=room, host=True)
+    return render_template('lobby.html', room=room, username=username, host=True)
+
+@app.route('/leave_room')
+def leave_room():
+    pass
 
 @app.route('/join')
 def join():
