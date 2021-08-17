@@ -12,7 +12,7 @@
 <br><br>
 ...or if you have a room code:<br>
 
-<form action="/join">
+<form action="{{ url_for('join', username=username) }}">
     <input type="text" name="room" placeholder="Enter room code"><br>
     <br>
     <button class="button button2" type="submit">Join Game</button>

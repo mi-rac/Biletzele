@@ -4,6 +4,8 @@ from app import app, socketio
 import random
 import string
 
+game_rooms = {}
+
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
@@ -18,29 +20,21 @@ def home():
 def new_lobby(username):
     letters = string.ascii_uppercase
     room = ''.join(random.choice(letters) for i in range(4))
+    game_rooms[room] = {}
+    game_rooms[room].set_default('users', []).append(username)
     return render_template('lobby.html', room=room, username=username, host=True)
 
 @app.route('/leave_room')
 def leave_room():
     pass
 
-@app.route('/join')
-def join():
+@app.route('/join/<string:username>')
+def join(username):
     room = request.args.get('room')
     if room:
-        return render_template('lobby.html', room=room)
+        return render_template('lobby.html', room=room, username=username)
     else:
-        return redirect(url_for('home'))
-
-@app.route('/chat')
-def chat():
-    username = request.args.get('username')
-    room = request.args.get('room')
-
-    if username and room:
-        return render_template('chat.html', username=username, room=room)
-    else:
-        return redirect(url_for('home'))
+        return redirect(url_for('home', username=username))
 
 @socketio.on('send_message')
 def handle_send_message_event(data):
