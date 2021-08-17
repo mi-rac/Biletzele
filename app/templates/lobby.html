@@ -23,14 +23,15 @@
     socket.on('connect', function () {
         socket.emit('join_room', {
             username: "{{ username }}",
-            room: "{{ room }}"
+            room: "{{ room }}",
+            users: "{{ users }}"
         });
     });
 
     socket.on('update_user_list', function(data) {
         if (data.room == "{{ room }}") {
             const newNode = document.createElement('div');
-            newNode.innerHTML = `<b>${data.username}</b> has joined the room`;
+            newNode.innerHTML = `<b>${data.users}</b> has joined the room`;
             document.getElementById('users').appendChild(newNode);
         };
     });

@@ -23,7 +23,7 @@ def new_lobby(username):
     room = ''.join(random.choice(letters) for i in range(4))
     game_rooms[room] = {}
     game_rooms[room].setdefault('users', []).append(username)
-    return render_template('lobby.html', room=room, username=username, users=json.dumps(game_rooms[room]['users']), host=True)
+    return render_template('lobby.html', room=room, username=username, users=game_rooms[room]['users'], host=True)
 
 @app.route('/leave_room')
 def leave_room():
