@@ -6,14 +6,10 @@
     <b>{{ room }}</b>
 </div>
 
-<div>
+<div id='users'>
 
 </div>
-<ul>
-  {% for user in users %}
-  <li>{{ user }}</li>
-  {% endfor %}
-</ul>
+
 <div>
     <form action="/leave_room">
         <input class="button button2" type="button" name="" value="Exit Room">
@@ -31,9 +27,11 @@
         });
     });
 
-    socket.on('join_room_announcement', function(data) {
+    socket.on('update_user_list', function(data) {
         if (data.room == "{{ room }}") {
-            alert("A new user has connected!")
+            const newNode = document.createElement('div');
+            newNode.innerHTML = `<b>${data.username}</b> has joined the room`;
+            document.getElementById('users').appendChild(newNode);
         };
     });
 
