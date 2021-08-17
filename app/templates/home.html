@@ -1,10 +1,17 @@
 {% extends "index.html" %}
 
 {% block content %}
-<form id="host" action="/host" method="get"></form>
-<form id="join" action="/join" method="get"></form>
+<form id="host" action="/lobby" method="get">
+    <button class="button button1" type="submit">Host Game</button><br>
+</form>
 
-<button form="host" class="button button1" type="submit">Host Game</button>
-<button form="join" class="button button2" type="submit">Join Game</button>
+<br><br>
+...or if you have a room code:<br>
+
+<form action="/join">
+    <input type="text" name="room" placeholder="Enter room code"><br>
+    <br>
+    <button class="button button2" type="submit">Join Game</button>
+</form>
 
 {% endblock %}

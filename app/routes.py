@@ -1,15 +1,27 @@
 from flask import render_template, flash, redirect, url_for, request
 from flask_socketio import join_room
 from app import app, socketio
+import random
+import string
 
 @app.route('/', methods=['GET', 'POST'])
-@app.route('/index', methods=['GET', 'POST'])
+@app.route('/home', methods=['GET', 'POST'])
 def home():
     return render_template('home.html')
 
-@app.route('/host')
-def host():
-    return render_template('host.html')
+@app.route('/lobby')
+def lobby():
+    letters = string.ascii_uppercase
+    room = ''.join(random.choice(letters) for i in range(4))
+    return render_template('lobby.html', room=room, host=True)
+
+@app.route('/join')
+def join():
+    room = request.args.get('room')
+    if room:
+        return render_template('lobby.html', room=room)
+    else:
+        return redirect(url_for('home'))
 
 @app.route('/chat')
 def chat():
