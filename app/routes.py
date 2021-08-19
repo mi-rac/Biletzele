@@ -41,12 +41,15 @@ def join():
 
 @app.route('/game/<string:room>/<string:username>/<int:host>')
 def game(room, username, host):
-    return render_template('lobby.html', room=room, username=username, users=game_rooms[room]['users'], host=host)
+    user_list = game_rooms[room]['users']
+    return render_template('lobby.html', room=room, username=username, host=host)
 
 @socketio.on('join_room')
 def handle_join_room_event(data):
     app.logger.info("{} has joined the room {}".format(data['username'], data['room']))
     join_room(data['room'])
+    user_list = game_rooms[data['room']]['users']
+    data['users'] = json.dumps(user_list)
     socketio.emit('update_user_list', data)
 
 @socketio.on('leave_room')
@@ -55,7 +58,6 @@ def handle_leave_room_event(data):
     leave_room(data['room'])
     user_list = game_rooms[data['room']]['users']
     user_list.remove(data['username'])
-    data['users'] = user_list
+    data['users'] = json.dumps(user_list)
     data['url'] = url_for('home', username=data["username"])
     socketio.emit('update_user_list', data)
-    socketio.emit('redirect_home', data)

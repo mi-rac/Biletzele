@@ -23,15 +23,20 @@
     socket.on('connect', function () {
         socket.emit('join_room', {
             username: "{{ username }}",
-            room: "{{ room }}",
-            users: "{{ users }}"
+            room: "{{ room }}"
         });
     });
 
     socket.on('update_user_list', function(data) {
         if (data.room == "{{ room }}") {
-            const newNode = document.createElement('div');
-            document.getElementById('users').innerHTML = `<b>${data.users}</b> has joined the room`;
+            document.getElementById('users').innerHTML = '';
+            const users = JSON.parse(data.users);
+            for (let i=0; i<users.length; i++) {
+                console.log(users[i]);
+                const newNode = document.createElement('div');
+                newNode.innerHTML = `<b>${users[i]}</b> is in the room`;
+                document.getElementById('users').appendChild(newNode);
+            };
         };
     });
 
