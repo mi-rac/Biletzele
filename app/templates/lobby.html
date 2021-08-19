@@ -11,8 +11,8 @@
 </div>
 
 <div>
-    <form id='leave'>
-        <button class="button button2" type="submit">Exit Room</button>
+    <form action='/home/{{ username }}'>
+        <button id='leave' class="button button2" type="submit">Exit Room</button>
     </form>
 </div>
 
@@ -35,14 +35,7 @@
         };
     });
 
-    socket.on('redirect_home', function (data) {
-        if (data['username'] == "{{ username }}") {
-            window.location = data.url;
-        }
-    });
-
-    document.getElementById("leave").onclick = function(e) {
-        e.preventDefault();
+    document.getElementById("leave").onclick = function() {
         socket.emit('leave_room', {
             username: "{{ username }}",
             room: "{{ room }}"
