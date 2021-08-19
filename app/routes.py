@@ -38,15 +38,19 @@ def join(username):
     else:
         return redirect(url_for('home', username=username))
 
-@socketio.on('send_message')
-def handle_send_message_event(data):
-    app.logger.info("{} has sent a message to room {}: '{}'".format(data['username'],
-                                                                    data['room'],
-                                                                    data['message']))
-    socketio.emit('receive_message', data, room=data['room'])
-
 @socketio.on('join_room')
 def handle_join_room_event(data):
     app.logger.info("{} has joined the room {}".format(data['username'], data['room']))
     join_room(data['room'])
     socketio.emit('update_user_list', data)
+
+@socketio.on('leave_room')
+def handle_leave_room_event(data):
+    app.logger.info("{} has left the room {}".format(data['username'], data['room']))
+    leave_room()
+    user_list = game_rooms[data['room']]['users']
+    user_list.remove(data['username'])
+    data['users'] = user_list
+    data['url'] = url_for('home', username=data["username"])
+    socketio.emit('update_user_list', data)
+    socketio.emit('redirect_home', data)
