@@ -17,20 +17,10 @@
   border: 2px solid forestgreen;
 }
 
-.button_green:hover {
-  background-color: forestgreen;
-  color: white;
-}
-
 .button_blue {
   background-color: white;
   color: black;
   border: 2px solid dodgerblue;
-}
-
-.button_blue:hover {
-  background-color: dodgerblue;
-  color: white;
 }
 
 .button_red {
@@ -39,10 +29,21 @@
   border: 2px solid red;
 }
 
+.button_green:hover {
+  background-color: forestgreen;
+  color: white;
+}
+
+.button_blue:hover {
+  background-color: dodgerblue;
+  color: white;
+}
+
 .button_red:hover {
   background-color: red;
   color: white;
 }
+
 
 .blue {
     color:dodgerblue;
@@ -54,8 +55,4 @@
 
 .inline {
   display: inline;
-}
-
-#choose_team {
-    cursor: pointer;
 }

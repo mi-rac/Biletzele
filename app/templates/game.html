@@ -23,12 +23,12 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
 <script>
-    const socket = io.connect("http://192.168.0.14:5000");
+    const socket = io.connect("http://192.168.0.25:5000");
 
-    document.getElementById("choose_team").onsubmit = function(e){
+    document.getElementById("choose_team").onclick = function(e){
         e.preventDefault();
         socket.emit('choose_team', {
-            choice: e.submitter.value,
+            choice: e.target.value,
             username: "{{ username }}",
             room: "{{ room }}"
         });
