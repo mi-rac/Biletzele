@@ -47,7 +47,8 @@ def lobby(room, username, host):
 
 @app.route('/game/<string:room>/<string:username>')
 def game(room, username):
-    user_list = game_rooms[room]['users'].keys()
+    user_list = game_rooms[room]['users']
+    
     return render_template('game.html', room=room, username=username, users=user_list)
 
 @socketio.on('join_room')

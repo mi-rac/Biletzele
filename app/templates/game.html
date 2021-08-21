@@ -2,8 +2,15 @@
 
 {% block content %}
 <div id='users'>
-    {% for user in users %}
-    <b>{{ user }}</b> - <div class="inline" id="{{ user }}">Choose team.</div><br>
+    {% for user in users.keys() %}
+    <b>{{ user }}</b> -
+    <div class="inline" id="{{ user }}">
+        {% if users[user]['team'] %}
+            team <div class="inline {{ users[user]['team'] }}">{{ users[user]['team'] }}</div>
+        {% else %}
+            Choose team!
+        {% endif %}
+    </div><br>
     {% endfor %}
 </div>
 
