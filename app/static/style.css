@@ -55,3 +55,7 @@
 .inline {
   display: inline;
 }
+
+#choose_team {
+    cursor: pointer;
+}

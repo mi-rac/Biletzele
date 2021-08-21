@@ -48,7 +48,7 @@ def lobby(room, username, host):
 @app.route('/game/<string:room>/<string:username>')
 def game(room, username):
     user_list = game_rooms[room]['users']
-    
+
     return render_template('game.html', room=room, username=username, users=user_list)
 
 @socketio.on('join_room')
@@ -56,7 +56,6 @@ def handle_join_room_event(data):
     app.logger.info("{} has joined the room {}".format(data['username'], data['room']))
     join_room(data['room'])
     user_list = list(game_rooms[data['room']]['users'].keys())
-    app.logger.info(user_list)
     data['users'] = json.dumps(user_list)
     socketio.emit('update_user_list', data)
 
