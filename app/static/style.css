@@ -43,3 +43,15 @@
   background-color: red;
   color: white;
 }
+
+.blue {
+    color:dodgerblue;
+}
+
+.red {
+    color:red;
+}
+
+.inline {
+  display: inline;
+}

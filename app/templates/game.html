@@ -3,17 +3,14 @@
 {% block content %}
 <div id='users'>
     {% for user in users %}
-    <b>{{ user }}</b> is in the room. -
-        <div id="team">
-            Choose team.
-        </div><br>
+    <b>{{ user }}</b> - <div class="inline" id="{{ user }}">Choose team.</div><br>
     {% endfor %}
 </div>
 
 <div>
-    <form>
-        <button id="red" class="button button_red" type="button">Red Team</button>
-        <button id="red" class="button button_blue" type="button">Blue Team</button>
+    <form id="choose_team">
+        <button class="button button_red" type="submit" name="team" value="red">Red Team</button>
+        <button class="button button_blue" type="submit" name="team" value="blue">Blue Team</button>
     </form>
 </div>
 
@@ -21,5 +18,20 @@
 <script>
     const socket = io.connect("http://127.0.0.1:5000");
 
+    document.getElementById("choose_team").onsubmit = function(e){
+        e.preventDefault();
+        socket.emit('choose_team', {
+            choice: e.submitter.value,
+            username: "{{ username }}",
+            room: "{{ room }}"
+        });
+    };
+
+    socket.on('display_team_choice', function(data) {
+        if (data.room == "{{ room }}") {
+            document.getElementById(data.username).innerHTML =
+            `team <div class="inline ${data.choice}">${data.choice}</div>`;
+        };
+    })
 </script>
 {% endblock %}
