@@ -11,24 +11,35 @@
   cursor: pointer;
 }
 
-.button1 {
+.button_green {
   background-color: white;
   color: black;
-  border: 2px solid #4CAF50;
+  border: 2px solid forestgreen;
 }
 
-.button1:hover {
-  background-color: #4CAF50;
+.button_green:hover {
+  background-color: forestgreen;
   color: white;
 }
 
-.button2 {
+.button_blue {
   background-color: white;
   color: black;
-  border: 2px solid #008CBA;
+  border: 2px solid dodgerblue;
 }
 
-.button2:hover {
-  background-color: #008CBA;
+.button_blue:hover {
+  background-color: dodgerblue;
+  color: white;
+}
+
+.button_red {
+  background-color: white;
+  color: black;
+  border: 2px solid red;
+}
+
+.button_red:hover {
+  background-color: red;
   color: white;
 }

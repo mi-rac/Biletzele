@@ -7,7 +7,7 @@
 
 <form action="/new_lobby" method="POST">
     <input name='username' type='hidden' value='{{ username }}'>
-    <button class="button button1" type="submit">Host Game</button><br>
+    <button class="button button_green" type="submit">Host Game</button><br>
 </form>
 
 <br><br>
@@ -17,7 +17,7 @@
     <input name='username' type='hidden' value='{{ username }}'>
     <input type="text" name="room" placeholder="Enter room code"><br>
     <br>
-    <button class="button button2" type="submit">Join Game</button>
+    <button class="button button_blue" type="submit">Join Game</button>
 </form>
 
 {% endblock %}

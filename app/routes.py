@@ -27,7 +27,7 @@ def new_lobby():
         room = ''.join(random.choice(letters) for i in range(4))
         game_rooms[room] = {}
         game_rooms[room].setdefault('users', []).append(username)
-    return redirect(url_for('game', room=room, username=username, host=int(True)))
+    return redirect(url_for('lobby', room=room, username=username, host=int(True)))
 
 @app.route('/join', methods=['GET', 'POST'])
 def join():
@@ -37,12 +37,17 @@ def join():
         if not room:
             return redirect(url_for('home', username=username))
         game_rooms[room]['users'].append(username)
-    return redirect(url_for('game', room=room, username=username, host=int(False)))
+    return redirect(url_for('lobby', room=room, username=username, host=int(False)))
 
-@app.route('/game/<string:room>/<string:username>/<int:host>')
-def game(room, username, host):
+@app.route('/lobby/<string:room>/<string:username>/<int:host>')
+def lobby(room, username, host):
     user_list = game_rooms[room]['users']
     return render_template('lobby.html', room=room, username=username, host=host)
+
+@app.route('/game/<string:room>/<string:username>')
+def game(room, username):
+    user_list = game_rooms[room]['users']
+    return render_template('game.html', room=room, username=username, users=user_list)
 
 @socketio.on('join_room')
 def handle_join_room_event(data):
@@ -61,3 +66,9 @@ def handle_leave_room_event(data):
     data['users'] = json.dumps(user_list)
     data['url'] = url_for('home', username=data["username"])
     socketio.emit('update_user_list', data)
+
+@socketio.on('start_game')
+def handle_start_game_event(data):
+    room = data['room']
+    app.logger.info("Game starting in room {}".format(room))
+    socketio.emit('redirect_start', data)

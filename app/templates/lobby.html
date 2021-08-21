@@ -12,9 +12,18 @@
 
 <div>
     <form action='/home/{{ username }}'>
-        <button id='leave' class="button button2" type="submit">Exit Room</button>
+        <button id='leave' class="button button_blue" type="submit">Exit Room</button>
     </form>
 </div>
+
+{% if host %}
+<div>
+    <form >
+        <button id='start' class="button button_green" type="submit">Start</button>
+    </form>
+</div>
+{% endif %}
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
 <script>
@@ -39,6 +48,19 @@
             };
         };
     });
+
+    socket.on('redirect_start', function(data) {
+        if (data.room == "{{ room }}") {
+            window.location.href = "/game/{{ room }}/{{ username }}";
+        };
+    });
+
+    document.getElementById("start").onclick = function(e) {
+        e.preventDefault();
+        socket.emit('start_game', {
+            room: "{{ room }}"
+        });
+    };
 
     document.getElementById("leave").onclick = function() {
         socket.emit('leave_room', {

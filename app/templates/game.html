@@ -1,40 +1,25 @@
 {% extends "index.html" %}
 
 {% block content %}
-<div>
-    <label>Share the room ID with all other players:</label><br>
-    <b>{{ room }}</b>
-</div>
-
 <div id='users'>
-
+    {% for user in users %}
+    <b>{{ user }}</b> is in the room. -
+        <div id="team">
+            Choose team.
+        </div><br>
+    {% endfor %}
 </div>
 
 <div>
-    <form action="/leave_room">
-        <input class="button button2" type="button" name="" value="Exit Room">
+    <form>
+        <button id="red" class="button button_red" type="button">Red Team</button>
+        <button id="red" class="button button_blue" type="button">Blue Team</button>
     </form>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
 <script>
     const socket = io.connect("http://127.0.0.1:5000");
-
-    socket.on('connect', function () {
-        socket.emit('join_room', {
-            username: "{{ username }}",
-            room: "{{ room }}",
-            users: "{{ users }}"
-        });
-    });
-
-    socket.on('update_user_list', function(data) {
-        if (data.room == "{{ room }}") {
-            const newNode = document.createElement('div');
-            newNode.innerHTML = `<b>${data.users}</b> has joined the room`;
-            document.getElementById('users').appendChild(newNode);
-        };
-    });
 
 </script>
 {% endblock %}
