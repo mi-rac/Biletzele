@@ -1,4 +1,4 @@
-from app import app, socketio
+from app import app, socketio, Config
 
 if __name__ == '__main__':
-    socketio.run(app, host='192.168.0.14', debug=True)
+    socketio.run(app, host=Config.IP_ADDRESS, debug=True)

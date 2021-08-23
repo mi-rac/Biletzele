@@ -1,11 +1,12 @@
 from flask import render_template, flash, redirect, url_for, request
 from flask_socketio import join_room, leave_room
-from app import app, socketio
+from app import app, socketio, Config
 import random
 import string
 import json
 
 game_rooms = {}
+ip=Config.IP_ADDRESS
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
@@ -43,15 +44,15 @@ def join():
 
 @app.route('/lobby/<string:room>/<string:username>/<int:host>')
 def lobby(room, username, host):
-    return render_template('lobby.html', room=room, username=username, host=host)
+    return render_template('lobby.html', room=room, username=username, host=host, ip=ip)
 
 @app.route('/chooseteam/<string:room>/<string:username>/<int:host>')
 def choose_team(room, username, host):
-    return render_template('choose_team.html', room=room, username=username, host=host, data=game_rooms[room])
+    return render_template('choose_team.html', room=room, username=username, host=host, data=game_rooms[room], ip=ip)
 
 @app.route('/enterwords/<string:room>/<string:username>/<int:host>')
 def enter_words(room, username, host):
-    return render_template('enter_words.html', room=room, username=username, host=host, data=game_rooms[room])
+    return render_template('enter_words.html', room=room, username=username, host=host, data=game_rooms[room], ip=ip)
 
 @socketio.on('join_room')
 def handle_join_room_event(data):
