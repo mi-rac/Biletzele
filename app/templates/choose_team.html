@@ -17,14 +17,16 @@
 <hr>
 
 <div>
-    <form id="choose_team">
+    <form class="row_space" id="choose_team">
         <button class="button button_red" type="submit" name="team" value="red">Red Team</button>
         <button class="button button_blue" type="submit" name="team" value="blue">Blue Team</button>
     </form>
 </div>
 
+<hr>
+
 {% if host %}
-    <div id="next_button">
+    <div align="center" id="next_button">
         {% if data['all_chosen'] %}
             <button class="button button_green">Next</button>
         {% endif %}

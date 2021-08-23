@@ -77,7 +77,7 @@ body {
   display: inline;
 }
 
-.row {
+.row_space {
   display: flex;
   justify-content: space-between;
 }
