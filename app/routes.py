@@ -45,11 +45,13 @@ def join():
 def lobby(room, username, host):
     return render_template('lobby.html', room=room, username=username, host=host)
 
-@app.route('/game/<string:room>/<string:username>')
-def game(room, username):
-    user_list = game_rooms[room]['users']
+@app.route('/chooseteam/<string:room>/<string:username>/<int:host>')
+def choose_team(room, username, host):
+    return render_template('choose_team.html', room=room, username=username, host=host, data=game_rooms[room])
 
-    return render_template('game.html', room=room, username=username, users=user_list)
+@app.route('/enterwords/<string:room>/<string:username>/<int:host>')
+def enter_words(room, username, host):
+    return render_template('enter_words.html', room=room, username=username, host=host, data=game_rooms[room])
 
 @socketio.on('join_room')
 def handle_join_room_event(data):
@@ -72,7 +74,7 @@ def handle_leave_room_event(data):
 def handle_start_game_event(data):
     room = data['room']
     app.logger.info("Game starting in room {}".format(room))
-    socketio.emit('redirect_start', data)
+    socketio.emit('redirect_choose_team', data)
 
 @socketio.on('choose_team')
 def handle_choose_team_event(data):
@@ -82,3 +84,16 @@ def handle_choose_team_event(data):
     app.logger.info("{} chose team {}".format(username, choice))
     game_rooms[room]['users'][username]['team'] = choice
     socketio.emit('display_team_choice', data)
+    try:
+        if all(game_rooms[room]['users'][name]['team'] for name in game_rooms[room]['users'].keys()):
+            game_rooms[room]['all_chosen'] = 1
+            app.logger.info("All players chose teams in rom {}".format(room))
+            socketio.emit('display_next_button', data)
+    except:
+        pass
+
+@socketio.on('enter_words')
+def handle_enter_words_event(data):
+    room = data['room']
+    app.logger.info("Get ready to enter words in room {}".format(room))
+    socketio.emit('redirect_enter_words', data)

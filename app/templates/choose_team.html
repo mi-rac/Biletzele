@@ -2,11 +2,11 @@
 
 {% block content %}
 <div id='users'>
-    {% for user in users.keys() %}
+    {% for user in data['users'].keys() %}
     <b>{{ user }}</b> -
     <div class="inline" id="{{ user }}">
-        {% if users[user]['team'] %}
-            team <div class="inline {{ users[user]['team'] }}">{{ users[user]['team'] }}</div>
+        {% if data['users'][user]['team'] %}
+            team <div class="inline {{ data['users'][user]['team'] }}">{{ data['users'][user]['team'] }}</div>
         {% else %}
             Choose team!
         {% endif %}
@@ -21,9 +21,17 @@
     </form>
 </div>
 
+{% if host %}
+    <div id="next_button">
+        {% if data['all_chosen'] %}
+            <button class="button button_green">Next</button>
+        {% endif %}
+    </div>
+{% endif %}
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
 <script>
-    const socket = io.connect("http://192.168.0.25:5000");
+    const socket = io.connect("http://192.168.0.14:5000");
 
     document.getElementById("choose_team").onclick = function(e){
         e.preventDefault();
@@ -39,6 +47,26 @@
             document.getElementById(data.username).innerHTML =
             `team <div class="inline ${data.choice}">${data.choice}</div>`;
         };
-    })
+    });
+
+    socket.on('display_next_button', function(data) {
+        if (data.room == "{{ room }}") {
+            document.getElementById("next_button").innerHTML =
+            `<button class="button button_green">Next</button>`;
+        };
+    });
+
+    socket.on('redirect_enter_words', function(data) {
+        if (data.room == "{{ room }}") {
+            window.location.href = "/enterwords/{{ room }}/{{ username }}/{{ host }}";
+        };
+    });
+
+    document.getElementById("next_button").onclick = function(e){
+        e.preventDefault();
+        socket.emit('enter_words', {
+            room: "{{ room }}"
+        });
+    };
 </script>
 {% endblock %}

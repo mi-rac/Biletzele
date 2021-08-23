@@ -27,7 +27,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
 <script>
-    const socket = io.connect("http://192.168.0.25:5000");
+    const socket = io.connect("http://192.168.0.14:5000");
 
     socket.on('connect', function () {
         socket.emit('join_room', {
@@ -48,9 +48,9 @@
         };
     });
 
-    socket.on('redirect_start', function(data) {
+    socket.on('redirect_choose_team', function(data) {
         if (data.room == "{{ room }}") {
-            window.location.href = "/game/{{ room }}/{{ username }}";
+            window.location.href = "/chooseteam/{{ room }}/{{ username }}/{{ host }}";
         };
     });
 
