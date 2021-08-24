@@ -29,6 +29,7 @@ def new_lobby():
         letters = string.ascii_uppercase
         room = ''.join(random.choice(letters) for i in range(4))
         game_rooms[room] = {}
+        game_rooms[room]['num_words'] = 5
         game_rooms[room].setdefault('users', {})[username] = {}
     return redirect(url_for('lobby', room=room, username=username, host=int(True)))
 
@@ -41,6 +42,20 @@ def join():
             return redirect(url_for('home', username=username))
         game_rooms[room]['users'][username] = {}
     return redirect(url_for('lobby', room=room, username=username, host=int(False)))
+
+@app.route('/submit_words', methods=['GET', 'POST'])
+def submit_words():
+    if request.method == "POST":
+        username = request.form.get('username')
+        room = request.form.get('room')
+        for i in range(game_rooms[room]['num_words']):
+            word = request.form.get(f'word{i}')
+            game_rooms[room].setdefault('words', []).append(word)
+    return redirect(url_for('waiting', room=room, username=username))
+
+@app.route('/waiting/<string:room>/<string:username>')
+def waiting(room, username):
+    return render_template('waiting.html', room=room, username=username, data=game_rooms[room], ip=ip)
 
 @app.route('/lobby/<string:room>/<string:username>/<int:host>')
 def lobby(room, username, host):
