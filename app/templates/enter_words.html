@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="heading">
-  <h1 class="heading__title">Enter {{ data['num_words'] }} words on the cards below.</h1>
+  <h1 class="heading__title">Enter {{ data.num_words }} words on the cards below.</h1>
   <p>Only <b>nouns</b> and <b>adjectives</b> allowed.</p>
 </div>
 
@@ -11,7 +11,7 @@
     <input name='username' type='hidden' value='{{ username }}'>
     <input name='room' type='hidden' value='{{ room }}'>
     <div class="cards">
-    {% for i in range(data['num_words']) %}
+    {% for i in range(data.num_words) %}
         <div class="card card-{{i+1}}">
           <h2 class="card__title"><input class="transparent" type="text" name="word{{i}}" required></h2>
         </div>

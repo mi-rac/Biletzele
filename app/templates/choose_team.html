@@ -2,11 +2,11 @@
 
 {% block content %}
 <div id='users'>
-    {% for user in data['users'].keys() %}
-    <b>{{ user }}</b> -
-    <div class="inline" id="{{ user }}">
-        {% if data['users'][user]['team'] %}
-            team <div class="inline {{ data['users'][user]['team'] }}">{{ data['users'][user]['team'] }}</div>
+    {% for player in data.players.keys() %}
+    <b>{{ player }}</b> -
+    <div class="inline" id="{{ player }}">
+        {% if data.players[player] %}
+            team <div class="inline {{ data.players[player] }}">{{ data.players[player] }}</div>
         {% else %}
             Choose team!
         {% endif %}
@@ -27,7 +27,7 @@
 
 {% if host %}
     <div align="center" id="next_button">
-        {% if data['all_chosen'] %}
+        {% if data.all_chosen %}
             <button class="button button_green">Next</button>
         {% endif %}
     </div>

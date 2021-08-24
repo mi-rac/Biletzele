@@ -9,7 +9,7 @@
 <hr>
 
 <div class='row_space'>
-  <div id='users'></div>
+  <div id='players'></div>
   <div>
       <form id='leave' action='/home/{{ username }}'>
           <button class="button button_blue" type="submit">Exit Room</button>
@@ -43,12 +43,12 @@
 
     socket.on('update_user_list', function(data) {
         if (data.room == "{{ room }}") {
-            document.getElementById('users').innerHTML = '';
-            const users = JSON.parse(data.users);
-            for (let i=0; i<users.length; i++) {
+            document.getElementById('players').innerHTML = '';
+            const players = JSON.parse(data.players);
+            for (let i=0; i<players.length; i++) {
                 const newNode = document.createElement('div');
-                newNode.innerHTML = `<b>${users[i]}</b> is in the room`;
-                document.getElementById('users').appendChild(newNode);
+                newNode.innerHTML = `<b>${players[i]}</b> is in the room`;
+                document.getElementById('players').appendChild(newNode);
             };
         };
     });
