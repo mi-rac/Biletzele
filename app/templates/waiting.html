@@ -1,5 +1,59 @@
 {% extends "index.html" %}
 
 {% block content %}
-    {{ data['words']|length }} words in the hat so far.
+<div>
+
+</div>
+
+<div id="words_left" class="">
+    There are {{ data.words|length }} words in the hat.
+</div>
+
+<div class="">
+    Score:
+</div>
+<div class='row_space'>
+    <div class="">
+        Red Team - {{ data.teams[1]['points'] }} points
+    </div>
+    <div class="">
+        {{ data.teams[0]['points'] }} points - Blue Team
+    </div>
+</div>
+
+<div align="center" id="next_button">
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+<script>
+    const socket = io.connect("http://" + "{{ ip }}" + ":5000");
+
+    socket.on('connect', function() {
+        socket.emit('another_player_join', {
+            'room': "{{ room }}"
+        });
+    });
+
+    socket.on('redirect_game', function(data) {
+        if (data.room == "{{ room }}") {
+            window.location.href = "/game/{{ room }}/{{ username }}";
+        };
+    });
+
+    socket.on('update_word_count', function(data) {
+        if (data.room == "{{ room }}") {
+            document.getElementById("words_left").innerHTML =
+            `There are ${data.num_words} words in the hat.`;
+        };
+    });
+
+    socket.on('display_next_button', function(data) {
+        if (data.room == "{{ room }}" && data.username == "{{ username }}") {
+            document.getElementById("next_button").innerHTML =
+            `<button class="button button_green">Next</button>`;
+        };
+    });
+</script>
+
 {% endblock %}

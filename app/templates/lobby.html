@@ -61,7 +61,7 @@
 
     document.getElementById("start").onclick = function(e) {
         e.preventDefault();
-        socket.emit('start_game', {
+        socket.emit('choose_teams', {
             room: "{{ room }}"
         });
     };
