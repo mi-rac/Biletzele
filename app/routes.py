@@ -73,7 +73,7 @@ def enter_words(room, username, host):
 def waiting(room, username):
     return render_template('waiting.html', room=room, username=username, data=game_data[room], ip=ip)
 
-@app.route('/game/<string:room>/<string:username>')
+@app.route('/game/<string:room>/<string:username>', methods=['GET', 'POST'])
 def game(room, username):
     return render_template('game.html', room=room, username=username, data=game_data[room], ip=ip)
 
@@ -100,7 +100,7 @@ def handle_leave_room_event(data):
     socketio.emit('update_user_list', data)
 
 @socketio.on('choose_teams')
-def handle_start_game_event(data):
+def handle_choose_teams_event(data):
     room = data['room']
     game_data[room].stage = "choose_team"
     app.logger.info("Get ready to choose teams in room {}".format(room))
@@ -128,7 +128,7 @@ def handle_enter_words_event(data):
     app.logger.info("Get ready to enter words in room {}".format(room))
     for username in game_data[room].players.keys():
         color = game_data[room].players[username]
-        game_data[room].teams[int(color=='red')]['players'].append(username)
+        game_data[room].teams[int(color!='red')].players.append(username)
     socketio.emit('redirect_enter_words', data)
 
 @socketio.on('another_player_join')
@@ -137,4 +137,16 @@ def handle_another_player_join_event(data):
     if len(game_data[room].words) == game_data[room].num_words * len(game_data[room].players.keys()):
         app.logger.info(f"All players entered words in room {room}")
         socketio.emit('display_next_button', {'room':room,
-                                              'username':game_data[room].teams[0]['players'][0]})
+                                              'username':game_data[room].teams[0].players[0]})
+
+@socketio.on('player_action')
+def handle_player_action_event(data):
+    username = data['username']
+    room = data['room']
+
+    team = game_data[room].turn.copy()
+    turn = game_data[room].teams[team].turn.copy()
+
+    game_data[room].turn = (team + 1) % 2
+    game_data[room].teams[team].turn = (turn + 1) % len(game_data[room].teams[team].players)
+    app.logger.info(f"{username} is about to start describing in room {room}.")
