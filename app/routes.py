@@ -144,9 +144,11 @@ def handle_player_action_event(data):
     username = data['username']
     room = data['room']
 
-    team = game_data[room].turn.copy()
-    turn = game_data[room].teams[team].turn.copy()
+    team = game_data[room].turn
+    turn = game_data[room].teams[team].turn
 
     game_data[room].turn = (team + 1) % 2
     game_data[room].teams[team].turn = (turn + 1) % len(game_data[room].teams[team].players)
     app.logger.info(f"{username} is about to start describing in room {room}.")
+    app.logger.info(f"Next time, it will be turn: {game_data[room].turn} overall and turn: {game_data[room].teams[team].turn} for the {game_data[room].teams[team].color} team")
+    socketio.emit('update_waiting', data)

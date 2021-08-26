@@ -21,6 +21,10 @@
     </div>
 </div>
 
+<div id='content'>
+
+</div>
+
 <form action="/game/{{ room }}/{{ username }}" method="POST">
     <div align="center" id="next_button">
 
@@ -44,6 +48,16 @@
             `There are ${data.num_words} words in the hat.`;
         };
     });
+
+    socket.on('update_waiting', function(data) {
+        if (data.room == "{{ room }}" && data.username != "{{ username }}") {
+            var color = "{{ data.players[username] }}";
+            document.getElementById("content").innerHTML =
+                `${data.username} is about to start picking for team ${color}.<br>
+                 Pay attention to what they say or do.`;
+        };
+    });
+
 
     socket.on('display_next_button', function(data) {
         if (data.room == "{{ room }}" && data.username == "{{ username }}") {
