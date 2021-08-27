@@ -14,5 +14,13 @@ class Game:
         self.turn = 0
         self.teams = [Team('red'), Team('blue')]
         self.words = []
+        self.guessed = []
         self.turn = 0
         self.players = {}
+
+guest = Game()
+guest.players['bula'] = 'red'
+guest.players['strula'] = 'blue'
+guest.teams[0].players = ['bula']
+guest.teams[1].players = ['strula']
+guest.words = ['ala', 'bala', 'portocala', 'ai', 'venit', 'si', 'mi', 'sugi', 'banana', 'mea']

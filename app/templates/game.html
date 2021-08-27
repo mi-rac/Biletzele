@@ -3,8 +3,60 @@
 
 {% block content %}
 
-<div class="">
+<div id="counter" class="">
 
 </div>
+
+<div id="content">
+    <div id="word">
+
+    </div>
+    <button id="guessed" class="button button_green" align="center" type="button">Next</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+<script>
+    const socket = io.connect("http://" + "{{ ip }}" + ":5000");
+
+    var counter = 10;
+
+    var myfunc = setInterval(function() {
+
+        document.getElementById("counter").innerHTML = `${counter}`;
+        counter --;
+        if (counter < 0) {
+            socket.emit('time_over', {
+                'room': "{{ room }}",
+                'username': "{{ username }}"
+            });
+            window.location.href = "/waiting/{{ room }}/{{ username }}";
+        };
+    }, 1000);
+
+    socket.on('connect', function() {
+        socket.emit('get_next_word', {
+            'room': "{{ room }}"
+        });
+    });
+
+    document.getElementById("guessed").onclick = function() {
+        socket.emit('get_next_word', {
+            'room': "{{ room }}"
+        });
+    };
+
+    socket.on('set_next_word', function(data) {
+        if (data.room == "{{ room }}") {
+            document.getElementById("word").innerHTML = `${data.word}`;
+        };
+    });
+
+    socket.on('redirect_waiting', function(data) {
+        if (data.room == "{{ room }}" && data.username == "{{ username }}") {
+            window.location.href = "/waiting/{{ room }}/{{ username }}";
+        };
+    });
+
+</script>
 
 {% endblock %}

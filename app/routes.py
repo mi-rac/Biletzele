@@ -1,13 +1,13 @@
 from flask import render_template, flash, redirect, url_for, request
 from flask_socketio import join_room, leave_room
 from app import app, socketio, Config
-from app.models import Game
+from app.models import Game, guest
 import random
 import string
 import json
 import time
 
-game_data = {}
+game_data = {'BULA': guest}
 ip = Config.IP_ADDRESS
 
 @app.route('/', methods=['GET', 'POST'])
@@ -136,6 +136,7 @@ def handle_another_player_join_event(data):
     room = data['room']
     if len(game_data[room].words) == game_data[room].num_words * len(game_data[room].players.keys()):
         app.logger.info(f"All players entered words in room {room}")
+        random.shuffle(game_data[room].words)
         socketio.emit('display_next_button', {'room':room,
                                               'username':game_data[room].teams[0].players[0]})
 
@@ -152,3 +153,13 @@ def handle_player_action_event(data):
     app.logger.info(f"{username} is about to start describing in room {room}.")
     app.logger.info(f"Next time, it will be turn: {game_data[room].turn} overall and turn: {game_data[room].teams[team].turn} for the {game_data[room].teams[team].color} team")
     socketio.emit('update_waiting', data)
+
+@socketio.on('get_next_word')
+def handle_get_next_word_event(data):
+    room = data['room']
+    if len(game_data[room].words) != 0:
+        word = game_data[room].words.pop()
+        data['word'] = word
+        socketio.emit('set_next_word', data)
+    else:
+        socketio.emit('redirect_waiting', data)
