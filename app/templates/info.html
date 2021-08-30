@@ -1,0 +1,16 @@
+<div class="heading">
+  <h2 class="heading__title">
+      There are <div class="inline" id="words_left">{{ data.words|length }}</div> words in the hat.
+  </h2>
+</div>
+<hr>
+<div class='row_space'>
+    <div class="">
+        <b><div class="inline red">Red Team</div> - <div class="inline" id="score_red">{{ data.score[0] }}</div> points</b>
+    </div>
+    <div class="">
+        <b><div class="inline" id="score_blue">{{ data.score[1] }}</div> points - <div class="inline blue">Blue Team</div></b>
+    </div>
+</div>
+<br>
+<hr>

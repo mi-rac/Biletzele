@@ -3,35 +3,23 @@
 
 {% block content %}
 
-<div id="words_left" class="">
-    There are {{ data.words|length }} words in the hat.
-</div>
-
-<div class="">
-    Score:
-</div>
-<div id="score" class='row_space'>
-    <div class="">
-        Red Team - {{ data.score[0] }} points
-    </div>
-    <div class="">
-        {{ data.score[1] }} points - Blue Team
-    </div>
-</div>
+{% include 'info.html' %}
 
 <div id="counter" class="">
 
 </div>
 
 <div id="content">
-    <div id="word">
+    <div class="cards">
+        <div class="card card-1" id="word">
 
+        </div>
     </div>
+
     <div class="row_space">
         <button id="guessed" class="button button_green" type="button">Next</button>
         <button id="previous" class="button button_blue" type="button">Previous Word</button>
     </div>
-
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
@@ -39,11 +27,12 @@
     const socket = io.connect("http://" + "{{ ip }}" + ":5000");
 
     var counter = 10;
+    var i = 1;
 
     var myfunc = setInterval(function() {
 
         document.getElementById("counter").innerHTML = `${counter}`;
-        counter --;
+        counter--;
         if (counter < 0) {
             socket.emit('player_switch', {
                 'room': "{{ room }}"
@@ -73,7 +62,9 @@
 
     socket.on('set_next_word', function(data) {
         if (data.room == "{{ room }}") {
-            document.getElementById("word").innerHTML = `${data.word}`;
+            document.getElementById("word").innerHTML = `<h2 class="transparent">${data.word}</h2>`;
+            document.getElementById("word").className = `card card-${i}`;
+            i = (i + 1) % 5 + 1;
         };
     });
 
@@ -85,15 +76,9 @@
 
     socket.on('update_stats', function(data) {
         if (data.room == "{{ room }}") {
-            document.getElementById("words_left").innerHTML =
-                `There are ${data.num_words} words in the hat.`;
-            document.getElementById("score").innerHTML =
-                `<div class="">
-                    Red Team - ${ data.score[0] } points
-                </div>
-                <div class="">
-                    ${ data.score[1] } points - Blue Team
-                </div>`;
+            document.getElementById("words_left").innerHTML =`${data.num_words}`;
+            document.getElementById("score_red").innerHTML =`${data.score[0]}`;
+            document.getElementById("score_blue").innerHTML =`${data.score[1]}`;
         };
     });
 </script>

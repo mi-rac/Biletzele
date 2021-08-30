@@ -1,25 +1,8 @@
 {% extends "index.html" %}
 
 {% block content %}
-<div>
 
-</div>
-
-<div id="words_left" class="">
-    There are {{ data.words|length }} words in the hat.
-</div>
-
-<div class="">
-    Score:
-</div>
-<div id="score" class='row_space'>
-    <div class="">
-        Red Team - {{ data.score[0] }} points
-    </div>
-    <div class="">
-        {{ data.score[1] }} points - Blue Team
-    </div>
-</div>
+{% include 'info.html' %}
 
 <div id='content'>
 
@@ -44,15 +27,9 @@
 
     socket.on('update_stats', function(data) {
         if (data.room == "{{ room }}") {
-            document.getElementById("words_left").innerHTML =
-                `There are ${data.num_words} words in the hat.`;
-            document.getElementById("score").innerHTML =
-                `<div class="">
-                    Red Team - ${ data.score[0] } points
-                </div>
-                <div class="">
-                    ${ data.score[1] } points - Blue Team
-                </div>`;
+            document.getElementById("words_left").innerHTML =`${data.num_words}`;
+            document.getElementById("score_red").innerHTML =`${data.score[0]}`;
+            document.getElementById("score_blue").innerHTML =`${data.score[1]}`;
         };
     });
 

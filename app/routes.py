@@ -133,7 +133,8 @@ def handle_join_waiting_event(data):
     room = data['room']
     app.logger.info("Updating info in waiting room {}".format(room))
     socketio.emit('update_stats', {'num_words': len(game_data[room].words),
-                                        'room': room})
+                                        'room': room,
+                                       'score': game_data[room].score})
     if len(game_data[room].words) == game_data[room].num_words * len(game_data[room].players.keys()):
         app.logger.info(f"All players entered words in room {room}")
         random.shuffle(game_data[room].words)

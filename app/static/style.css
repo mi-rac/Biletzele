@@ -207,7 +207,10 @@ body {
 }
 
 .transparent{
+    grid-row: 3/4;
+    font-weight: 300;
     background: transparent;
+    color: black;
     margin: 0 auto;
     text-align: center;
     width: 300px;

@@ -49,7 +49,7 @@
     socket.on('display_team_choice', function(data) {
         if (data.room == "{{ room }}") {
             document.getElementById(data.username).innerHTML =
-            `team <div class="inline ${data.choice}">${data.choice}</div>`;
+            `team <div class="inline ${data.choice}"><b>${data.choice}</b></div>`;
         };
     });
 
