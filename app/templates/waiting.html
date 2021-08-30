@@ -4,9 +4,11 @@
 
 {% include 'info.html' %}
 
-<div id='content'>
+<div align="center" id='content'>
 
 </div>
+
+<br>
 
 <form action="/game/{{ room }}/{{ username }}" method="POST">
     <div align="center" id="next_button">
@@ -37,7 +39,7 @@
         if (data.room == "{{ room }}" && data.username == "{{ username }}") {
             document.getElementById("next_button").innerHTML =
                 `<button type='submit' class="button button_green">Next</button>`;
-            document.getElementById("content").innerHTML = ``;
+            document.getElementById("content").innerHTML = `<h3>Your turn!</h3>`;
         };
     });
 

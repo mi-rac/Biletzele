@@ -5,7 +5,7 @@
 
 {% include 'info.html' %}
 
-<div id="counter" class="">
+<div id="counter" align="center">
 
 </div>
 
@@ -15,10 +15,10 @@
 
         </div>
     </div>
-
+    <br>
     <div class="row_space">
-        <button id="guessed" class="button button_green" type="button">Next</button>
         <button id="previous" class="button button_blue" type="button">Previous Word</button>
+        <button id="guessed" class="button button_green" type="button">Next</button>
     </div>
 </div>
 
@@ -26,12 +26,12 @@
 <script>
     const socket = io.connect("http://" + "{{ ip }}" + ":5000");
 
-    var counter = 10;
+    var counter = 20;
     var i = 1;
 
     var myfunc = setInterval(function() {
 
-        document.getElementById("counter").innerHTML = `${counter}`;
+        document.getElementById("counter").innerHTML = `<h2>${counter}</h2>`;
         counter--;
         if (counter < 0) {
             socket.emit('player_switch', {

@@ -135,15 +135,18 @@ def handle_join_waiting_event(data):
     socketio.emit('update_stats', {'num_words': len(game_data[room].words),
                                         'room': room,
                                        'score': game_data[room].score})
-    if len(game_data[room].words) == game_data[room].num_words * len(game_data[room].players.keys()):
+    team = game_data[room].turn
+    team_turn = game_data[room].teams[team].turn
+    player = game_data[room].teams[team].players[team_turn]
+
+    if len(game_data[room].words) + len(game_data[room].guessed) == game_data[room].num_words * len(game_data[room].players.keys()):
         app.logger.info(f"All players entered words in room {room}")
         random.shuffle(game_data[room].words)
-        username = game_data[room].teams[0].players[0]
         socketio.emit('display_next', {'room':room,
-                                       'username':username})
+                                       'username':player})
         socketio.emit('info_waiting', {'room':room,
-                                       'username':username,
-                                       'color': game_data[room].players[username]})
+                                       'username':player,
+                                       'color': game_data[room].players[player]})
 
 @socketio.on('player_switch')
 def handle_player_switch_event(data):
@@ -159,8 +162,8 @@ def handle_player_switch_event(data):
     next_team = game_data[room].turn
     next_player = game_data[room].teams[next_team].turn
     username = game_data[room].teams[next_team].players[next_player]
-    app.logger.info(f"{username} is next")
 
+    app.logger.info(f"{username} is next")
     random.shuffle(game_data[room].words)
 
     time.sleep(1)
@@ -195,7 +198,7 @@ def handle_get_next_word_event(data):
         data['word'] = word
         socketio.emit('set_next_word', data)
     else:
-        socketio.emit('player_switch', {'room':room})
+        handle_player_switch_event({'room':room})
         game_data[room].words = game_data[room].guessed
         game_data[room].guessed = []
         random.shuffle(game_data[room].words)
