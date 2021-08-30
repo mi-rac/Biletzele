@@ -53,7 +53,7 @@ def submit_words():
             word = request.form.get(f'word{i}')
             game_data[room].words.append(word)
         app.logger.info("Updating info in waiting room {}".format(room))
-        socketio.emit('update_word_count', {'num_words': len(game_data[room].words),
+        socketio.emit('update_stats', {'num_words': len(game_data[room].words),
                                             'room': room})
     return redirect(url_for('waiting', room=room, username=username))
 
@@ -150,16 +150,52 @@ def handle_player_action_event(data):
 
     game_data[room].turn = (team + 1) % 2
     game_data[room].teams[team].turn = (turn + 1) % len(game_data[room].teams[team].players)
+    socketio.emit('display_next_button', {'room':room,
+                                          'username':game_data[room].teams[0].players[0]})
     app.logger.info(f"{username} is about to start describing in room {room}.")
     app.logger.info(f"Next time, it will be turn: {game_data[room].turn} overall and turn: {game_data[room].teams[team].turn} for the {game_data[room].teams[team].color} team")
-    socketio.emit('update_waiting', data)
+    socketio.emit('update_game_info', data)
+
+
+@socketio.on('show_first_word')
+def handle_show_first_word_event(data):
+    room = data['room']
+    word = game_data[room].words[-1]
+    socketio.emit('update_stats', {'num_words': len(game_data[room].words),
+                                        'room': room})
+    data['word'] = word
+    socketio.emit('set_next_word', data)
+
 
 @socketio.on('get_next_word')
 def handle_get_next_word_event(data):
     room = data['room']
+    team = game_data[room].turn
     if len(game_data[room].words) != 0:
-        word = game_data[room].words.pop()
+        game_data[room].guessed.append(game_data[room].words.pop())
+        game_data[room].score[team] += 1
+        socketio.emit('update_stats', {'num_words': len(game_data[room].words),
+                                            'room': room,
+                                            'score': game_data[room].score})
+        word = game_data[room].words[-1]
         data['word'] = word
         socketio.emit('set_next_word', data)
     else:
         socketio.emit('redirect_waiting', data)
+
+
+@socketio.on('get_prev_word')
+def handle_get_prev_word_event(data):
+    room = data['room']
+    team = game_data[room].turn
+    if len(game_data[room].guessed) != 0:
+        game_data[room].words.append(game_data[room].guessed.pop())
+        game_data[room].score[team] -= 1
+        socketio.emit('update_stats', {'num_words': len(game_data[room].words),
+                                            'room': room,
+                                            'score': game_data[room].score})
+        word = game_data[room].words[-1]
+        data['word'] = word
+        socketio.emit('set_next_word', data)
+    else:
+        pass

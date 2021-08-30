@@ -3,6 +3,22 @@
 
 {% block content %}
 
+<div id="words_left" class="">
+    There are {{ data.words|length }} words in the hat.
+</div>
+
+<div class="">
+    Score:
+</div>
+<div id="score" class='row_space'>
+    <div class="">
+        Red Team - {{ data.score[0] }} points
+    </div>
+    <div class="">
+        {{ data.score[1] }} points - Blue Team
+    </div>
+</div>
+
 <div id="counter" class="">
 
 </div>
@@ -11,7 +27,11 @@
     <div id="word">
 
     </div>
-    <button id="guessed" class="button button_green" align="center" type="button">Next</button>
+    <div class="row_space">
+        <button id="guessed" class="button button_green" type="button">Next</button>
+        <button id="previous" class="button button_blue" type="button">Previous Word</button>
+    </div>
+
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
@@ -25,7 +45,7 @@
         document.getElementById("counter").innerHTML = `${counter}`;
         counter --;
         if (counter < 0) {
-            socket.emit('time_over', {
+            socket.emit('player_action', {
                 'room': "{{ room }}",
                 'username': "{{ username }}"
             });
@@ -34,13 +54,19 @@
     }, 1000);
 
     socket.on('connect', function() {
-        socket.emit('get_next_word', {
+        socket.emit('show_first_word', {
             'room': "{{ room }}"
         });
     });
 
     document.getElementById("guessed").onclick = function() {
         socket.emit('get_next_word', {
+            'room': "{{ room }}"
+        });
+    };
+
+    document.getElementById("previous").onclick = function() {
+        socket.emit('get_prev_word', {
             'room': "{{ room }}"
         });
     };
@@ -57,6 +83,19 @@
         };
     });
 
+    socket.on('update_stats', function(data) {
+        if (data.room == "{{ room }}") {
+            document.getElementById("words_left").innerHTML =
+                `There are ${data.num_words} words in the hat.`;
+            document.getElementById("score").innerHTML =
+                `<div class="">
+                    Red Team - ${ data.score[0] } points
+                </div>
+                <div class="">
+                    ${ data.score[1] } points - Blue Team
+                </div>`;
+        };
+    });
 </script>
 
 {% endblock %}

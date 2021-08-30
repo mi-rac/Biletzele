@@ -12,12 +12,12 @@
 <div class="">
     Score:
 </div>
-<div class='row_space'>
+<div id="score" class='row_space'>
     <div class="">
-        Red Team - {{ data.teams[0].score }} points
+        Red Team - {{ data.score[0] }} points
     </div>
     <div class="">
-        {{ data.teams[1].score }} points - Blue Team
+        {{ data.score[1] }} points - Blue Team
     </div>
 </div>
 
@@ -42,14 +42,21 @@
         });
     });
 
-    socket.on('update_word_count', function(data) {
+    socket.on('update_stats', function(data) {
         if (data.room == "{{ room }}") {
             document.getElementById("words_left").innerHTML =
-            `There are ${data.num_words} words in the hat.`;
+                `There are ${data.num_words} words in the hat.`;
+            document.getElementById("score").innerHTML =
+                `<div class="">
+                    Red Team - ${ data.score[0] } points
+                </div>
+                <div class="">
+                    ${ data.score[1] } points - Blue Team
+                </div>`;
         };
     });
 
-    socket.on('update_waiting', function(data) {
+    socket.on('update_game_info', function(data) {
         if (data.room == "{{ room }}" && data.username != "{{ username }}") {
             var color = "{{ data.players[username] }}";
             document.getElementById("content").innerHTML =
@@ -66,12 +73,7 @@
         };
     });
 
-    document.getElementById("next_button").onclick = function(e){
-        socket.emit('player_action', {
-            'room': "{{ room }}",
-            'username': "{{ username }}"
-        });
-    };
+
 </script>
 
 {% endblock %}
