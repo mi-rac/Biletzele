@@ -45,9 +45,8 @@
         document.getElementById("counter").innerHTML = `${counter}`;
         counter --;
         if (counter < 0) {
-            socket.emit('player_action', {
-                'room': "{{ room }}",
-                'username': "{{ username }}"
+            socket.emit('player_switch', {
+                'room': "{{ room }}"
             });
             window.location.href = "/waiting/{{ room }}/{{ username }}";
         };
@@ -61,7 +60,8 @@
 
     document.getElementById("guessed").onclick = function() {
         socket.emit('get_next_word', {
-            'room': "{{ room }}"
+            'room': "{{ room }}",
+            'username': "{{ username }}"
         });
     };
 

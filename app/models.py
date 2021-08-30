@@ -7,6 +7,7 @@ class Team:
 
 class Game:
     def __init__(self):
+        self.beginning = 1
         self.all_chosen = 0
         self.score = [0, 0]
         self.num_words = 5

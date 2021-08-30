@@ -37,7 +37,7 @@
     const socket = io.connect("http://" + "{{ ip }}" + ":5000");
 
     socket.on('connect', function() {
-        socket.emit('another_player_join', {
+        socket.emit('join_waiting', {
             'room': "{{ room }}"
         });
     });
@@ -56,20 +56,19 @@
         };
     });
 
-    socket.on('update_game_info', function(data) {
-        if (data.room == "{{ room }}" && data.username != "{{ username }}") {
-            var color = "{{ data.players[username] }}";
-            document.getElementById("content").innerHTML =
-                `${data.username} is about to start picking for team ${color}.<br>
-                 Pay attention to what they say or do.`;
+    socket.on('display_next', function(data) {
+        if (data.room == "{{ room }}" && data.username == "{{ username }}") {
+            document.getElementById("next_button").innerHTML =
+                `<button type='submit' class="button button_green">Next</button>`;
+            document.getElementById("content").innerHTML = ``;
         };
     });
 
-
-    socket.on('display_next_button', function(data) {
-        if (data.room == "{{ room }}" && data.username == "{{ username }}") {
-            document.getElementById("next_button").innerHTML =
-            `<button type='submit' class="button button_green">Next</button>`;
+    socket.on('info_waiting', function(data) {
+        if (data.room == "{{ room }}" && data.username != "{{ username }}") {
+            document.getElementById("content").innerHTML =
+                `${data.username} is about to start picking for team ${data.color}.<br>
+                 Pay attention to what they say or do.`;
         };
     });
 
