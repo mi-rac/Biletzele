@@ -33,7 +33,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
 <script>
     var socket = io.connect('http://' + document.domain + ':' + location.port);
-    console.log(document.domain, location.port)
 
     socket.on('connect', function () {
         socket.emit('join_room', {
