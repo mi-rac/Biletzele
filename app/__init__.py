@@ -4,6 +4,6 @@ from flask_socketio import SocketIO
 
 app = Flask(__name__)
 app.config.from_object(Config)
-socketio = SocketIO(app, logger=True, always_connect=True, cors_allowed_origins=None)
+socketio = SocketIO(app)
 
 from app import routes, models
