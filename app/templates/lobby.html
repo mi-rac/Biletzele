@@ -31,12 +31,12 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
 <script>
-    if (window.location.protocol == "https:") {
+    if (window.location.protocol == "https") {
       var ws_scheme = "wss://";
     } else {
       var ws_scheme = "ws://";
     }
-    
+
     var socket = io.connect(ws_scheme + location.host);
     console.log(socket)
 
