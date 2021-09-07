@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, url_for, request
 from flask_socketio import join_room, leave_room
-from app import app, socketio, Config
+from app import app, socketio
 from app.models import Game, guest
 import random
 import string
@@ -8,7 +8,6 @@ import json
 import time
 
 game_data = {'BULA': guest}
-ip = Config.IP_ADDRESS
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
@@ -56,23 +55,23 @@ def submit_words():
 
 @app.route('/lobby/<string:room>/<string:username>/<int:host>')
 def lobby(room, username, host):
-    return render_template('lobby.html', room=room, username=username, host=host, ip=ip)
+    return render_template('lobby.html', room=room, username=username, host=host)
 
 @app.route('/chooseteam/<string:room>/<string:username>/<int:host>')
 def choose_team(room, username, host):
-    return render_template('choose_team.html', room=room, username=username, host=host, data=game_data[room], ip=ip)
+    return render_template('choose_team.html', room=room, username=username, host=host, data=game_data[room])
 
 @app.route('/enterwords/<string:room>/<string:username>/<int:host>')
 def enter_words(room, username, host):
-    return render_template('enter_words.html', room=room, username=username, host=host, data=game_data[room], ip=ip)
+    return render_template('enter_words.html', room=room, username=username, host=host, data=game_data[room])
 
 @app.route('/waiting/<string:room>/<string:username>')
 def waiting(room, username):
-    return render_template('waiting.html', room=room, username=username, data=game_data[room], ip=ip)
+    return render_template('waiting.html', room=room, username=username, data=game_data[room])
 
 @app.route('/game/<string:room>/<string:username>', methods=['GET', 'POST'])
 def game(room, username):
-    return render_template('game.html', room=room, username=username, data=game_data[room], ip=ip)
+    return render_template('game.html', room=room, username=username, data=game_data[room])
 
 
 @socketio.on('join_room')
