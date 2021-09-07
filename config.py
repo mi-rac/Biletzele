@@ -1,2 +1,2 @@
 class Config(object):
-    IP_ADDRESS = "192.168.0.14"
+    ADDRESS = "http://biletzele.herokuapp.com/"
