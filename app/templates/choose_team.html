@@ -35,7 +35,8 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
 <script>
-    var socket = io.connect('http://' + document.domain + ':' + location.port);
+    var socket = io.connect(location.host);
+    console.log(socket);
 
     document.getElementById("choose_team").onclick = function(e){
         e.preventDefault();
