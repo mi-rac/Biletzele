@@ -31,7 +31,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
 <script>
-    var socket = io.connect('https://biletzele.herokuapp.com');
+    var socket = io.connect('wss://' + document.domain);
     console.log(socket)
 
     socket.on('connect', function () {
