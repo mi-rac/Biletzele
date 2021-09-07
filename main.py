@@ -3,4 +3,4 @@ monkey.patch_all()
 from app import app, socketio, Config
 
 if __name__ == '__main__':
-    socketio.run(app, host=Config.ADDRESS)
+    socketio.run(app)
